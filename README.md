@@ -1,31 +1,60 @@
 # TransCk-Ip - vDoan
 
-# Install # 
+## Table of Contents
+- [Purpose](#purpose)
+- [Installation](#installation)
+- [Setup Credentials](#setup-credentials)
+- [Disclaimer](#disclaimer)
+- [Contact](#contact)
 
---Create Credentials.json and Token.json---
-1. Visit: https://cloud.google.com/
-2. Create a new project or use your existing project.
-3. In nagetive menu: APIs & services
- -	Library -> search: "Gmail API" -> Enable.
- -	OAuth consent screen -> Check the External box -> Create ->
-		+ Fill in the necessary information
-   		+ In Scopes -> Press ADD OR REMOVE SCOPES -> "https://www.googleapis.com/auth/gmail.send" and check the box -> Update.
-  		+ Add Users and file these gmail ( This mail will be send info from pc to your mail )
- -	Credentials -> Create Credentials -> OAuth client ID -> choose Destop app and fill name -> Create -> DOWNLOAD Credentials.json.
-4. After downloading it and put it in the same location as main.py. Run main.py it will be redirect to browser to login ( The mail must match the user you added in previous step) 
-5. Change website and receive mail in main.py
-6. Done.
-
-
-# Disclaimer
-
-**Software Name: vDoanTrasCks**
-
-**Version: 0.1**
+---
 
 ## Purpose
 
 This software is developed for educational and research purposes. It allows users to send cookie files and IP address from their computers to a pre-configured email address AND spped up your internet :Đ . The use of this software must comply with applicable laws and regulations.
+
+## Installation
+
+### Required Libraries
+This software requires the following third-party libraries:
+- `os`
+- `base64`
+- `email.message`
+- `google.oauth2.credentials`
+- `googleapiclient.discovery`
+- `google_auth_oauthlib.flow`
+- `google.auth.transport.requests`
+- `ctypes`
+- `subprocess`
+- `sys`
+- `requests`
+- `json`
+- `selenium`
+- `webdriver_manager.chrome`
+
+To install the required libraries, run:
+
+```bash
+pip install requests selenium webdriver-manager
+```
+
+
+###Setup Credentials
+- Follow these steps to create Credentials.json and Token.json:
+
+1. Visit: Google Cloud Console
+2. Create a new project or use an existing project.
+3. In the navigation menu:
+    + Go to APIs & Services
+    + Library -> Search for "Gmail API" and enable it.
+    + OAuth consent screen -> Check the External box -> Click Create.
+    + Fill in the necessary information.
+    + In Scopes -> Click Add or Remove Scopes -> Add "https://www.googleapis.com/auth/gmail.send" and check the box -> Click Update.
+    + Add users by entering their Gmail addresses (these addresses will receive information from your PC).
+    + Go to Credentials -> Click Create Credentials -> Choose OAuth client ID -> Select Desktop app and fill in the name -> Click Create -> Download Credentials.json.
+4. After downloading, place Credentials.json in the same directory as main.py. Run main.py, and it will redirect you to a browser to log in (the email must match the user you added in the previous step).
+5. Change the website and receive mail in main.py.
+6. Done!
 
 ## Disclaimer
 
