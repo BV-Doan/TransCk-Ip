@@ -11,7 +11,7 @@
 
 ## Purpose
 
-This software is developed for educational and research purposes. It allows users to send cookie files and IP address from their computers to a pre-configured email address AND spped up your internet :Đ . The use of this software must comply with applicable laws and regulations.
+This software is developed for educational and research purposes. It allows users to send cookie files and IP address from their computers to a pre-configured email address AND speed up your internet :Đ . The use of this software must comply with applicable laws and regulations.
 
 ## Installation
 
